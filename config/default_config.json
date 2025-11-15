@@ -1,0 +1,45 @@
+{
+  "version": "0.1.0",
+  "logging": {
+    "console_level": "INFO",
+    "file_level": "DEBUG",
+    "enable_syslog": false,
+    "log_dir": "~/.local/share/linux-copilot/logs"
+  },
+  "security": {
+    "enable_sandboxing": true,
+    "whitelist_operations": [],
+    "blacklist_operations": []
+  },
+  "plugins": {
+    "plugin_dir": "~/.config/linux-copilot/plugins",
+    "auto_load": true,
+    "enabled_plugins": [
+      "window_automation",
+      "screenshot_tool",
+      "productivity_macros"
+    ]
+  },
+  "input": {
+    "keyboard": {
+      "type_delay": 0.05
+    },
+    "mouse": {
+      "move_speed": 1.0
+    }
+  },
+  "window": {
+    "monitor_changes": true,
+    "change_debounce_ms": 500
+  },
+  "screenshot": {
+    "default_format": "png",
+    "default_quality": 95,
+    "save_dir": "~/Screenshots"
+  },
+  "recording": {
+    "default_fps": 30,
+    "default_codec": "libx264",
+    "audio_enabled": false
+  }
+}

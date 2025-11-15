@@ -1,0 +1,19 @@
+# Linux Agentic Copilot - Python Dependencies
+
+# Core dependencies
+asyncio-mqtt>=0.16.1
+pydantic>=2.0.0
+python-daemon>=3.0.0
+
+# Optional X11 support
+python-xlib>=0.33; platform_system=="Linux"
+
+# Optional Wayland support (requires system packages)
+# pywayland>=0.4.14; platform_system=="Linux"
+
+# Development dependencies
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+black>=23.0.0
+flake8>=6.0.0
+mypy>=1.4.0
