@@ -33,20 +33,48 @@ include_directories(
     ${WAYLAND_INCLUDE_DIRS}
 )
 
-# Source files
-set(CORE_SOURCES
-    src/event_loop.cpp
-    src/plugin_manager.cpp
-    src/ipc_bridge.cpp
-    src/thread_pool.cpp
-    src/security_manager.cpp
-    src/window_manager_native.cpp
-    src/input_manager_native.cpp
-    src/screenshot_native.cpp
-)
+# Source files (only add files that exist)
+set(CORE_SOURCES "")
 
-# Core library
-add_library(copilot_core SHARED ${CORE_SOURCES})
+# Check for each source file and add if it exists
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/src/event_loop.cpp")
+    list(APPEND CORE_SOURCES src/event_loop.cpp)
+endif()
+
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/src/thread_pool.cpp")
+    list(APPEND CORE_SOURCES src/thread_pool.cpp)
+endif()
+
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/src/plugin_manager.cpp")
+    list(APPEND CORE_SOURCES src/plugin_manager.cpp)
+endif()
+
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/src/ipc_bridge.cpp")
+    list(APPEND CORE_SOURCES src/ipc_bridge.cpp)
+endif()
+
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/src/security_manager.cpp")
+    list(APPEND CORE_SOURCES src/security_manager.cpp)
+endif()
+
+if(X11_FOUND AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/src/window_manager_native.cpp")
+    list(APPEND CORE_SOURCES src/window_manager_native.cpp)
+endif()
+
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/src/input_manager_native.cpp")
+    list(APPEND CORE_SOURCES src/input_manager_native.cpp)
+endif()
+
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/src/screenshot_native.cpp")
+    list(APPEND CORE_SOURCES src/screenshot_native.cpp)
+endif()
+
+# Only create library if we have at least one source file
+if(CORE_SOURCES)
+    add_library(copilot_core SHARED ${CORE_SOURCES})
+else()
+    message(FATAL_ERROR "No source files found for copilot_core library!")
+endif()
 
 target_link_libraries(copilot_core
     PUBLIC
@@ -66,7 +94,7 @@ set_target_properties(copilot_core PROPERTIES
 
 # Python bindings (using pybind11)
 find_package(pybind11 CONFIG)
-if(pybind11_FOUND)
+if(pybind11_FOUND AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/bindings/python_bindings.cpp")
     pybind11_add_module(copilot_native bindings/python_bindings.cpp)
     target_link_libraries(copilot_native PRIVATE copilot_core)
 endif()
@@ -83,11 +111,13 @@ install(DIRECTORY include/
     FILES_MATCHING PATTERN "*.hpp"
 )
 
-# Example plugins
-add_subdirectory(examples)
+# Example plugins (if directory exists)
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/examples")
+    add_subdirectory(examples)
+endif()
 
-# Tests
-if(BUILD_TESTING)
+# Tests (if enabled and directory exists)
+if(BUILD_TESTING AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tests")
     enable_testing()
     add_subdirectory(tests)
 endif()

@@ -18,6 +18,7 @@
 #include <thread>
 #include <atomic>
 #include <vector>
+#include <string>
 #include <chrono>
 #include <sys/epoll.h>
 

@@ -18,6 +18,7 @@
 #include <future>
 #include <atomic>
 #include <memory>
+#include <unordered_set>
 
 namespace copilot {
 namespace core {
